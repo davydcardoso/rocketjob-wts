@@ -1,0 +1,43 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Contacts {
+  id String @id @default(uuid())
+
+  name         String?
+  pushName     String   @map("push_name")
+  number       String   @unique
+  isBusiness   Boolean? @default(false) @map("is_business")
+  isEnterprise Boolean? @default(false) @map("is_enterprise")
+  isMe         Boolean  @default(false) @map("is_me")
+  isUser       Boolean? @default(true) @map("is_user")
+  isGroup      Boolean? @default(false) @map("is_group")
+  isWAContact  Boolean? @default(false) @map("is_wa_contact")
+  isMyContact  Boolean? @default(false) @map("is_my_contact")
+  isBlocked    Boolean? @default(true) @map("is_blocked")
+
+  server     String?
+  serialized String?
+
+  @@map("contacts")
+}
+
+model Messages {
+  id         String   @id @default(uuid())
+  contactId  String   @map("contact_id")
+  body       String   @db.Text
+  isMedia    Boolean? @default(false) @map("is_media")
+  mimeType   String?  @map("myme_type")
+  receivedIn DateTime @map("reeceived_in")
+
+  @@map("messages")
+}
